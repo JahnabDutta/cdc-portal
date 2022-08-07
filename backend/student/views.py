@@ -64,6 +64,9 @@ class StudentDetails(APIView):
         user = request.user
         allowed_edit = get_config_value('AllowProfileEdit')
         student_profile = get_object_or_404(StudentProfile, user=user)
+        # if profile is verified, then person will not be allowed to edit profile
+        student_is_verified = student_profile.verified
+        allowed_edit=(allowed_edit) and (not student_is_verified)
         # student_profile = StudentProfile.objects.get(user=user)
         serializer = StudentProfileSerializer(student_profile)
         data = serializer.data
@@ -161,7 +164,7 @@ class AvailableOffers(APIView):
             id__in=m.objects.filter(student__user=user).values_list('profile'))
 
     def get_offers(self, profile, model):
-        if not profile.banned:
+        if not profile.banned and profile.verified:
             if profile.program_branch.check_gpa:
                 offers = model.objects.filter(min_gpa__lte=profile.gpa, min_ug_gpa__lte=profile.ug_gpa,
                                               eligible_program_branch__getter__contains=profile.program_branch.getter,

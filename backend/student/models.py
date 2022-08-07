@@ -80,6 +80,9 @@ class StudentProfile(models.Model):
     placed = models.BooleanField(default=False)
     std_image = models.ImageField(default='default.jpg', upload_to='student_images')
     registration_timestamp = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    #new field
+    verified = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.user.get_full_name()
