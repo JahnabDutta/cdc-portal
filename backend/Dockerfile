@@ -11,6 +11,7 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 RUN export JAVA_HOME
 
 COPY Pipfile* ./
+RUN pipenv lock
 RUN PIP_USER=1 PIP_IGNORE_INSTALLED=1 pipenv install --system --deploy --dev \
     && find /usr/local \
         \( -type d -a -name test -o -name tests \) \
