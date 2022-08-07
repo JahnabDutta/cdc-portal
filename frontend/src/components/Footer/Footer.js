@@ -49,6 +49,7 @@ const footers = [
 const useStyles = makeStyles((theme) => ({
   footer: {
     backgroundColor: 'white',
+    backgroundSize: 'cover',
     background: 'url(https://i.imgur.com/VcAY65E.jpeg) top center no-repeat',
     color: '#012970',
     padding: theme.spacing(3, 0),

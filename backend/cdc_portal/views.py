@@ -97,7 +97,7 @@ class LDAPOAuth(views.APIView):
         except User.DoesNotExist:
             if len(name) < 2:
                 name.append("")
-            user = User.objects.create(username=roll_no, email=email, first_name=name[0], last_name=name[-1])
+            user = User.objects.create(username=roll_no, email=email, first_name=" ".join(name[:-1]), last_name=name[-1])
         if user:
             payload = {
                 'id': user.id,
