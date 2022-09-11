@@ -5,7 +5,8 @@ from .models import OfficeMails, News, PastRecruiters, PlacementCalendar, Volunt
     AlumniTestimonial, HomeImageCarousel, DesignationChoices,\
     VolunteersYearChoices, CareerCommittee, CoreTeamContacts,\
     NavBarSubOptions, AboutUs, DirectorMessage,\
-    Achievements, WhyRecruit, CareerDevelopmentActivity, CourseHighlights
+    Achievements, WhyRecruit, CareerDevelopmentActivity, \
+    CourseHighlights, SheetsPlacementCalendar
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -136,4 +137,10 @@ class CourseHighlightsSerializer(serializers.ModelSerializer):
 class PlacementCalendarSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlacementCalendar
+        fields = '__all__'
+
+
+class SheetsPlacementCalendarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SheetsPlacementCalendar
         fields = '__all__'

@@ -21,5 +21,6 @@ urlpatterns = [
     path('whyrecruitdata/', views.WhyRecruitSerializer.as_view(), name="whyrecruitdata"),
     path('course_highlights/', views.CourseHighlightsSerializer.as_view(), name="course_highlights"),
     path('placement_calendar/', views.PlacementCalendarView.as_view(), name="placement_calendar"),
+    path('sheets_placement_calendar/', views.SheetsPlacementCalendarView.as_view(), name="sheets_placement_calendar"),
     path('alerts/', views.Alerts.as_view(), name="alerts"),
 ]

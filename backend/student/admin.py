@@ -1,5 +1,5 @@
 from django.contrib import admin
-from student.models import StudentProfile, Resume, ProgramAndBranch
+from student.models import StudentProfile, Resume, ProgramAndBranch, BranchChangers
 from .resources import StudentProfileResource
 from import_export.admin import ImportExportActionModelAdmin
 import csv
@@ -124,4 +124,11 @@ class ResumeAdmin(admin.ModelAdmin):
 
     class Meta:
         model = Resume
+        fields = '__all__'
+
+
+@admin.register(BranchChangers)
+class BranchChangersAdmin(admin.ModelAdmin):
+    class Meta:
+        model = BranchChangers
         fields = '__all__'

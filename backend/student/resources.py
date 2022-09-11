@@ -44,6 +44,10 @@ class StudentProfileResource(resources.ModelResource):
         column_name='Date of birth',
         attribute='dob',
     )
+    nationality = Field(
+        column_name='Nationality',
+        attribute='nationality'
+    )
     phone = Field(
         column_name='Phone Number',
         attribute='phone'
@@ -101,11 +105,11 @@ class StudentProfileResource(resources.ModelResource):
         model = StudentProfile
         fields = (
             'user__first_name', 'user__last_name', 'roll_no', 'user__email', 'year', 'gpa', 'ug_college',
-            'ug_gpa', 'ug_passing_year', 'ug_program_branch', 'phone', 'dob',
+            'ug_gpa', 'ug_passing_year', 'ug_program_branch', 'phone', 'dob', 'nationality',
             'jee_air', 'physical_disability', 'permanent_address', 'current_address', 'x_year',
             'x_board_name', 'x_percentage', 'xii_year', 'xii_board_name', 'xii_percentage', 'banned')
         export_order = (
             'user__first_name', 'user__last_name', 'roll_no', 'user__email', 'program_branch', 'year', 'gpa',
-            'ug_college', 'ug_gpa', 'ug_passing_year', 'ug_program_branch', 'phone', 'dob',
+            'ug_college', 'ug_gpa', 'ug_passing_year', 'ug_program_branch', 'phone', 'dob', 'nationality',
             'jee_air', 'category', 'physical_disability', 'permanent_address', 'current_address', 'x_year',
             'x_board_name', 'x_percentage', 'xii_year', 'xii_board_name', 'xii_percentage', 'banned', 'nationality')

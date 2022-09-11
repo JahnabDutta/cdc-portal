@@ -39,6 +39,10 @@ class ProgramAndBranch(models.Model):
     def __str__(self):
         return self.program + " " + self.name
 
+    class Meta:
+        verbose_name = "Program and Branch"
+        verbose_name_plural = "Programs and Branches"
+
 
 class StudentProfile(models.Model):
     # Choices
@@ -137,3 +141,16 @@ def delete_user(sender, instance=None, **kwargs):
 
 
 post_delete.connect(delete_user, sender=StudentProfile)
+
+
+class BranchChangers(models.Model):
+    name = models.CharField(max_length=100)
+    old_roll_number = models.CharField(max_length=15)
+    new_roll_number = models.CharField(max_length=15)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Branch Changer'
+        verbose_name_plural = 'Branch Changers'

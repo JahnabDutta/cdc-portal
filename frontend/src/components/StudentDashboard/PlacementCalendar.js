@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 import instance from '../../api/axios';
 import Loading from '../Loading';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import { Container, Typography } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FadeInWhenVisible from '../Animation/FadeIn';
-import FadeUpBigDataWhenVisible from '../Animation/FadeUpBigData';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Iframe from 'react-iframe';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,48 +41,34 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     padding: '1rem',
   },
+  iframe: {
+    width: '100%',
+    height: '50vh',
+  },
 }));
-
-const localizer = momentLocalizer(moment);
-
-function getDate(date) {
-  date = new Date(date);
-  return date.toDateString();
-}
-
-const createdes = (upcoming) => {
-  return { __html: upcoming.description };
-};
 
 const PlacementCalendar = () => {
   const classes = useStyles();
   const [loading, setLoding] = useState(false);
-  const [dialog, setdialog] = useState({});
-  const [open, setopen] = useState(false);
-  const [data, setdata] = useState([]);
-  const [upcoming, setupcoming] = useState([]);
-
-  const handleClickOpen = (event) => {
-    setdialog(event);
-    setopen(true);
-  };
-
-  const handleClose = () => {
-    setopen(false);
-    setdialog({});
-  };
+  const [calendarLink, setcalendarLink] = useState('');
 
   useEffect(() => {
     instance
-      .get('main/navbar_suboptions?search=Upcoming Companies')
+      .get('main/sheets_placement_calendar/')
       .then((res) => {
-        setupcoming(res.data[0]);
-      })
-      .catch((error) => console.log(error));
-    instance
-      .get('main/placement_calendar/')
-      .then((res) => {
-        setdata(res.data);
+        const batch = localStorage
+          .getItem('cdc_Dname')
+          .split('(')[1]
+          .substring(0, 3);
+        console.log(batch);
+        res.data.forEach((calender) => {
+          const applicable_years = calender.applicable_years.split(',');
+          console.log(applicable_years);
+          if (applicable_years.includes(batch)) {
+            setcalendarLink(calender.calendar_publish_link);
+            console.log(calender.calendar_publish_link);
+          }
+        });
       })
       .then(() => setLoding(false))
       .catch((error) => console.log(error));
@@ -121,61 +98,19 @@ const PlacementCalendar = () => {
                 </FadeInWhenVisible>
               </Grid>
               <Grid item xs={12}>
-                <FadeUpBigDataWhenVisible>
-                  <Paper className={classes.paper}>
-                    <Calendar
-                      localizer={localizer}
-                      events={data}
-                      startAccessor="start"
-                      endAccessor="end"
-                      style={{ height: 500 }}
-                      onSelectEvent={(event, e) => handleClickOpen(event)}
+                <div className={classes.iframe}>
+                  {loading ? (
+                    <h2>Loading...</h2>
+                  ) : (
+                    <Iframe
+                      src={loading ? '#' : calendarLink}
+                      width="100%"
+                      height="140%"
                     />
-                  </Paper>
-                </FadeUpBigDataWhenVisible>
-              </Grid>
-              <Grid item xs={12}>
-                <FadeUpBigDataWhenVisible>
-                  <Paper className={classes.paper}>
-                    <Typography
-                      component="h5"
-                      variant="h5"
-                      style={{ fontSize: 25, textAlign: 'center' }}
-                    >
-                      Upcoming Companies
-                    </Typography>
-                    {upcoming ? (
-                      <p
-                        dangerouslySetInnerHTML={createdes(upcoming)}
-                        className={classes.text}
-                      />
-                    ) : (
-                      <p className={classes.text}>Coming soon...</p>
-                    )}
-                  </Paper>
-                </FadeUpBigDataWhenVisible>
+                  )}
+                </div>
               </Grid>
             </Grid>
-            <Dialog
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                {dialog.title} ({getDate(dialog.start)} - {getDate(dialog.end)})
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  {dialog.description}
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                  Close
-                </Button>
-              </DialogActions>
-            </Dialog>
           </Container>
         </>
       )}

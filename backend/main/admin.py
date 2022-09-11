@@ -4,7 +4,7 @@ from main.models import OfficeMails, PastRecruiters, News,\
     VolunteersYearChoices, CareerCommittee, CoreTeamContacts,\
     Volunteers, NavBarSubOptions, AboutUs, DirectorMessage,\
     Achievements, WhyRecruit, CareerDevelopmentActivity, PlacementCalendar,\
-    CourseHighlights
+    CourseHighlights, SheetsPlacementCalendar
 from import_export.admin import ImportExportActionModelAdmin
 
 
@@ -156,6 +156,16 @@ class PlacementCalendarAdmin(admin.ModelAdmin):
 
     class Meta:
         model = PlacementCalendar
+        fields = '__all__'
+
+
+@admin.register(SheetsPlacementCalendar)
+class SheetsPlacementCalendarAdmin(admin.ModelAdmin):
+    list_display = ['type', 'calendar_publish_link', 'applicable_years']
+    list_filter = ['type', ]
+
+    class Meta:
+        model = SheetsPlacementCalendar
         fields = '__all__'
 
 

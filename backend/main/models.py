@@ -204,6 +204,9 @@ class CareerDevelopmentActivity(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name_plural = "Career Development Activities"
+
 
 class HomeImageCarousel(models.Model):
     ordering = models.PositiveIntegerField(default=64)
@@ -312,3 +315,19 @@ class PlacementCalendar(models.Model):
 
     class Meta:
         verbose_name_plural = 'Placement Calendar'
+
+
+class SheetsPlacementCalendar(models.Model):
+    PLACEMENT_CALENDAR_CHOICES = (
+        ('internship', 'Internship'),
+        ('placement', 'Placement'),
+    )
+    type = models.CharField(choices=PLACEMENT_CALENDAR_CHOICES, max_length=20)
+    calendar_publish_link = models.URLField(max_length=2000, help_text='Keep only the src link of the published google sheet iframe')
+    applicable_years = models.CharField(max_length=100, help_text='Enter the years separated by comma. Ex: B20, M21')
+
+    def __str__(self):
+        return self.type
+
+    class Meta:
+        verbose_name_plural = 'Google Sheets Placement Calendar'

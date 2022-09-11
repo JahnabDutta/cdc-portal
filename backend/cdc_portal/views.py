@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 
-from student.models import StudentProfile
+from student.models import StudentProfile, BranchChangers
 from .utils import get_config, edit_config, get_config_value, IsSuperUser
 from decouple import config
 
@@ -77,11 +77,9 @@ class LDAPOAuth(views.APIView):
                 email = result.split("mail=mail: ")[1].split(",")[0].replace("}", "").replace("{", "")
                 name = result.split("givenname=givenName: ")[1].split(",")[0].replace("}", "").replace("{", "").split(" ")
                 roll_no = result.split("sn=sn: ")[1].split(",")[0].replace("(", "").replace(")", "").replace("}", "").replace("{", "")
-                changers = get_config_value('Changers')
-                for i in changers:
-                    if roll_no == i[0]:
-                        roll_no = i[1]
-                        break
+                isBranchChanger = BranchChangers.objects.filter(old_roll_number=roll_no)
+                if len(isBranchChanger) > 0:
+                    roll_no = isBranchChanger[0].new_roll_number
             except:  # noqa: E722
                 return Response(
                     {'Error': "LDAP Server Down"},
